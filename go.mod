@@ -3,7 +3,7 @@ module github.com/landoniwnl/hltv-api
 go 1.13
 
 require (
-	github.com/PuerkitoBio/goquery v1.8.0 // indirect
+	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/antchfx/htmlquery v1.2.4 // indirect
 	github.com/antchfx/xmlquery v1.3.10 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
