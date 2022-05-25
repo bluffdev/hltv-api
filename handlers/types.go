@@ -21,7 +21,7 @@ type Team struct {
 	Players []Player `json:"players"`
 }
 
-// Used with player and players
+// Used with players.go
 type PlayerStats struct {
 	Id         int    `json:"id"`
 	Nickname   string `json:"nickname"`
@@ -30,4 +30,27 @@ type PlayerStats struct {
 	MapsPlayed string `json:"mapsPlayed"`
 	Kd         string `json:"kd"`
 	Rating     string `json:"rating"`
+}
+
+// Used with player.go
+type PlayerTeam struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+// Used with player.go
+type PlayerStats2 struct {
+	Id           int        `json:"id"`
+	Team         PlayerTeam `json:"team"`
+	Image        string     `json:"image"`
+	Nickname     string     `json:"nickname"`
+	Age          int        `json:"age"`
+	Rating       float64    `json:"rating"`
+	Impact       float64    `json:"impact"`
+	Dpr          float64    `json:"dpr"`
+	Apr          float64    `json:"apr"`
+	Kast         float64    `json:"kast"`
+	Kpr          float64    `json:"kpr"`
+	HsPercentage float64    `json:"hsPercentage"`
+	MapsPlayed   int        `json:"mapsPlayed"`
 }
