@@ -54,3 +54,24 @@ type PlayerStats2 struct {
 	HsPercentage float64    `json:"hsPercentage"`
 	MapsPlayed   int        `json:"mapsPlayed"`
 }
+
+// Used with matches
+type Event struct {
+	Name string `json:"name"`
+	Logo string `json:"logo"`
+}
+
+type MatchTeam struct {
+	Name string `json:"name"`
+	Logo string `json:"logo"`
+}
+
+type Match struct {
+	Id    int         `json:"id"`
+	Date  string      `json:"date"`
+	Time  string      `json:"time"`
+	Event Event       `json:"event"`
+	Stars int         `json:"stars"`
+	Maps  string      `json:"maps"`
+	Teams []MatchTeam `json:"teams"`
+}
