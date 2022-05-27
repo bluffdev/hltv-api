@@ -11,4 +11,5 @@ func RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/players", handlers.GetPlayers).Methods("GET")
 	router.HandleFunc("/players/{id}", handlers.GetPlayer).Methods("GET")
 	router.HandleFunc("/matches", handlers.GetMatches).Methods("GET")
+	router.HandleFunc("/results", handlers.GetResults).Methods("GET")
 }

@@ -75,3 +75,17 @@ type Match struct {
 	Maps  string      `json:"maps"`
 	Teams []MatchTeam `json:"teams"`
 }
+
+type ResultTeam struct {
+	Name   string `json:"name"`
+	Logo   string `json:"logo"`
+	Result int    `json:"result"`
+}
+
+type Result struct {
+	Event   Event        `json:"event"`
+	Maps    string       `json:"maps"`
+	Time    string       `json:"time"`
+	Teams   []ResultTeam `json:"teams"`
+	MatchId int          `json:"matchId"`
+}
