@@ -89,3 +89,27 @@ type Result struct {
 	Teams   []ResultTeam `json:"teams"`
 	MatchId int          `json:"matchId"`
 }
+
+type Stats struct {
+	Name     string  `json:"name"`
+	Nickname string  `json:"nickname"`
+	Id       int     `json:"id"`
+	Kills    int     `json:"kills"`
+	Deaths   int     `json:"deaths"`
+	Adr      float64 `json:"adr"`
+	Kast     float64 `json:"kast"`
+	Rating   float64 `json:"rating"`
+}
+
+type TeamStats struct {
+	Name    string  `json:"name"`
+	Logo    string  `json:"logo"`
+	Result  int     `json:"result"`
+	Players []Stats `json:"players"`
+}
+
+type Match2 struct {
+	Id    int         `json:"id"`
+	Date  string      `json:"date"`
+	Teams []TeamStats `json:"teams"`
+}
