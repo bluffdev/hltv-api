@@ -1,12 +1,12 @@
 package main
 
 import (
-    "fmt"
-    "log"
-    "net/http"
+	"fmt"
+	"log"
+	"net/http"
 
-    "github.com/gorilla/mux"
-    "github.com/landoniwnl/hltv-api/routes"
+	"github.com/gorilla/mux"
+	"github.com/landoniwnl/hltv-api/routes"
 )
 
 func main() {
