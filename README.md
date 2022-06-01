@@ -8,6 +8,6 @@ This api is an educational project I developed for getting data from the popular
 2. `/teams/{id}`
 3. `/players`
 4. `/players/{id}`
-5. `matches`
+5. `/matches`
 6. `/matches/{id}`
 7. `/results`
