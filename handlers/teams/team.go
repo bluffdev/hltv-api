@@ -1,4 +1,4 @@
-package handlers
+package teams
 
 import (
 	"encoding/json"
@@ -11,6 +11,26 @@ import (
 	"github.com/gocolly/colly"
 	"github.com/gorilla/mux"
 )
+
+type Country struct {
+    Name string `json:"name"`
+    Flag string `json:"flag"`
+}
+
+type Player struct {
+    Fullname string  `json:"fullname"`
+    Image    string  `json:"image"`
+    Nickname string  `json:"nickname"`
+    Country  Country `json:"country"`
+}
+
+type Team struct {
+    Id      int      `json:"id"`
+    Ranking int      `json:"ranking"`
+    Name    string   `json:"name"`
+    Logo    string   `json:"logo"`
+    Players []Player `json:"players"`
+}
 
 func GetTeam(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")

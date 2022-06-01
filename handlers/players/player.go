@@ -1,4 +1,4 @@
-package handlers
+package players
 
 import (
 	"encoding/json"
@@ -12,8 +12,29 @@ import (
 	"github.com/gorilla/mux"
 )
 
+type PlayerTeam struct {
+    Id   int    `json:"id"`
+    Name string `json:"name"`
+}
+
+type PlayerStats struct {
+    Id           int        `json:"id"`
+    Team         PlayerTeam `json:"team"`
+    Image        string     `json:"image"`
+    Nickname     string     `json:"nickname"`
+    Age          int        `json:"age"`
+    Rating       float64    `json:"rating"`
+    Impact       float64    `json:"impact"`
+    Dpr          float64    `json:"dpr"`
+    Apr          float64    `json:"apr"`
+    Kast         float64    `json:"kast"`
+    Kpr          float64    `json:"kpr"`
+    HsPercentage float64    `json:"hsPercentage"`
+    MapsPlayed   int        `json:"mapsPlayed"`
+}
+
 // TODO: ADD THIS FUNCTION TO A UTILS FILE
-func ExtractId2(link string) int {
+func ExtractId(link string) int {
     stringId := strings.Split(link, "/")
     id, _ := strconv.Atoi(stringId[3])
     return id
@@ -36,7 +57,7 @@ func GetPlayer(w http.ResponseWriter, r *http.Request) {
 
     var hsPercentage float64 
     var mapsPlayed int
-    var Player PlayerStats2
+    var Player PlayerStats
 
     c.OnHTML("div.columns", func(h *colly.HTMLElement) {
         hsPercentageString := h.DOM.Find("div.col.stats-rows.standard-box").Eq(0).Find("span").Eq(3).Text()
@@ -47,7 +68,7 @@ func GetPlayer(w http.ResponseWriter, r *http.Request) {
 
     c.OnHTML("div.playerSummaryStatBox", func(h *colly.HTMLElement) {
         link := h.ChildAttr("a.a-reset.text-ellipsis", "href")
-        teamId := ExtractId2(link)
+        teamId := ExtractId(link)
         teamName := h.ChildText("a.a-reset.text-ellipsis")
         image := h.ChildAttr("img.summaryBodyshot", "src")
         nickname := h.ChildText("h1.summaryNickname.text-ellipsis")
@@ -69,7 +90,7 @@ func GetPlayer(w http.ResponseWriter, r *http.Request) {
 
         idInt, _ := strconv.Atoi(id)
 
-        Player = PlayerStats2{
+        Player = PlayerStats{
             idInt,
             PlayerTeam{
                 teamId,

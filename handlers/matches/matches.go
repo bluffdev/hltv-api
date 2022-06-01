@@ -1,4 +1,4 @@
-package handlers
+package matches
 
 import (
 	"encoding/json"
@@ -11,6 +11,26 @@ import (
 	"github.com/gocolly/colly"
 )
 
+type Event struct {
+    Name string `json:"name"`
+    Logo string `json:"logo"`
+}
+
+type MatchTeam struct {
+    Name string `json:"name"`
+    Logo string `json:"logo"`
+}
+
+type Matches struct {
+    Id    int         `json:"id"`
+    Date  string      `json:"date"`
+    Time  string      `json:"time"`
+    Event Event       `json:"event"`
+    Stars int         `json:"stars"`
+    Maps  string      `json:"maps"`
+    Teams []MatchTeam `json:"teams"`
+}
+
 func ExtractMatchId(link string) int {
     idString := strings.Split(link, "/")
     id, _ := strconv.Atoi(idString[2])
@@ -22,7 +42,7 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
 
     c := colly.NewCollector()
 
-    var Matches []Match
+    var matches []Matches
     c.OnHTML("div.liveMatch-container", func(h *colly.HTMLElement) {
         idString := h.ChildAttr("a.match.a-reset", "href")
         id := ExtractMatchId(idString)
@@ -52,7 +72,7 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
             })
         })
 
-        Matches = append(Matches, Match{
+        matches = append(matches, Matches{
             id,
             "Today",
             "Live",
@@ -90,7 +110,7 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
                 })
             })
 
-            Matches = append(Matches, Match{
+            matches = append(matches, Matches{
                 id,
                 date,
                 time,
@@ -115,5 +135,5 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
 
     c.Visit("https://www.hltv.org/matches")
 
-    json.NewEncoder(w).Encode(Matches)
+    json.NewEncoder(w).Encode(matches)
 }

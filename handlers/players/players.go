@@ -1,4 +1,4 @@
-package handlers
+package players
 
 import (
 	"encoding/json"
@@ -10,6 +10,16 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly"
 )
+
+type PlayersStats struct {
+    Id         int    `json:"id"`
+    Nickname   string `json:"nickname"`
+    Team       string `json:"team"`
+    Slug       string `json:"slug"`
+    MapsPlayed string `json:"mapsPlayed"`
+    Kd         string `json:"kd"`
+    Rating     string `json:"rating"`
+}
 
 func ExtractIdAndSlug(link string) (int, string) {
     linkSlice := make([]string, 5)
@@ -24,7 +34,7 @@ func GetPlayers(w http.ResponseWriter, r *http.Request) {
 
     c := colly.NewCollector()
 
-    var Players []PlayerStats
+    var Players []PlayersStats
 
     c.OnHTML("table.stats-table.player-ratings-table", func(h *colly.HTMLElement) {
         h.DOM.Find("tbody").Find("tr").Each(func(i int, s *goquery.Selection) {
@@ -35,7 +45,7 @@ func GetPlayers(w http.ResponseWriter, r *http.Request) {
             mapsPlayed := s.Find("td.statsDetail").First().Text()
             kd := s.Find("td.statsDetail").Eq(2).Text()
             rating := s.Find("td.ratingCol").Text()
-            Players = append(Players, PlayerStats{
+            Players = append(Players, PlayersStats{
                 id,
                 nickname,
                 team,

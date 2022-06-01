@@ -1,4 +1,4 @@
-package handlers
+package matches
 
 import (
 	"encoding/json"
@@ -12,6 +12,30 @@ import (
 	"github.com/gocolly/colly"
 	"github.com/gorilla/mux"
 )
+
+type Stats struct {
+    Name     string  `json:"name"`
+    Nickname string  `json:"nickname"`
+    Id       int     `json:"id"`
+    Kills    int     `json:"kills"`
+    Deaths   int     `json:"deaths"`
+    Adr      float64 `json:"adr"`
+    Kast     float64 `json:"kast"`
+    Rating   float64 `json:"rating"`
+}
+
+type TeamStats struct {
+    Name    string  `json:"name"`
+    Logo    string  `json:"logo"`
+    Result  int     `json:"result"`
+    Players []Stats `json:"players"`
+}
+
+type Match struct {
+    Id    int         `json:"id"`
+    Date  string      `json:"date"`
+    Teams []TeamStats `json:"teams"`
+}
 
 func ExtractPlayerId(link string) int {
     linkSlice := strings.Split(link, "/")
@@ -37,7 +61,7 @@ func GetMatch(w http.ResponseWriter, r *http.Request) {
     c := colly.NewCollector()
 
     var Teams []TeamStats
-    var Match Match2
+    var match Match
 
     c.OnHTML("div.contentCol", func(h *colly.HTMLElement) {
         teamOneName := h.DOM.Find("div.team1-gradient").Find("div.teamName").Text()
@@ -124,7 +148,7 @@ func GetMatch(w http.ResponseWriter, r *http.Request) {
 
         newId, _ := strconv.Atoi(id)
 
-        Match = Match2{
+        match = Match{
             newId,
             date,
             Teams,
@@ -141,5 +165,5 @@ func GetMatch(w http.ResponseWriter, r *http.Request) {
 
     c.Visit(url)
 
-    json.NewEncoder(w).Encode(Match)
+    json.NewEncoder(w).Encode(match)
 }

@@ -1,4 +1,4 @@
-package handlers
+package results
 
 import (
 	"encoding/json"
@@ -11,13 +11,32 @@ import (
 	"github.com/gocolly/colly"
 )
 
+type Event struct {
+	Name string `json:"name"`
+	Logo string `json:"logo"`
+}
+
+type Team struct {
+	Name  string `json:"name"`
+	Logo  string `json:"logo"`
+	Score int    `json:"score"`
+}
+
+type Result struct {
+	Event   Event  `json:"event"`
+	Maps    string `json:"maps"`
+	Date    string `json:"date"`
+	Teams   []Team `json:"teams"`
+	MatchId int    `json:"matchId"`
+}
+
 func ExtractDate(date string) string {
     dateSlice := strings.Split(date, " ")
     newDate := strings.Join(dateSlice[2:], " ")
     return newDate
 }
 
-func ExtractMatchId2(link string) int {
+func ExtractMatchId(link string) int {
     idString := strings.Split(link, "/")
     id, _ := strconv.Atoi(idString[2])
     return id 
@@ -48,9 +67,9 @@ func GetResults(w http.ResponseWriter, r *http.Request) {
             eventLogo, _ := s.Find("img.event-logo").Attr("src")
             maps := s.Find("div.map-text").Text()
             idString, _ := s.Parent().Parent().Parent().Parent().Attr("href")
-            id := ExtractMatchId2(idString)
+            id := ExtractMatchId(idString)
 
-            Teams := []ResultTeam{
+            Teams := []Team{
                 {teamOneName, teamOneLogo, teamOneScore},
                 {teamTwoName, teamTwoLogo, teamTwoScore},
             }
@@ -66,6 +85,10 @@ func GetResults(w http.ResponseWriter, r *http.Request) {
                 id,
             })
         })
+    })
+
+    c.OnRequest(func(r *colly.Request) {
+        log.Println("Visiting", r.URL)
     })
 
     c.OnError(func(r *colly.Response, err error) {
