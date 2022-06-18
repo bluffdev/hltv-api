@@ -50,6 +50,7 @@ func GetTeam(w http.ResponseWriter, r *http.Request) {
         nickname := e.ChildText("span.text-ellipsis.bold")
         countryName := e.ChildAttr("img.flag", "title")
         flag := e.ChildAttr("img.flag", "src")
+        completeFlag := "https://www.hltv.org/" + flag
 
         Players = append(Players, Player{
             fullname,
@@ -57,7 +58,7 @@ func GetTeam(w http.ResponseWriter, r *http.Request) {
             nickname,
             Country{
                 countryName,
-                flag,
+                completeFlag,
             },
         })
     })
