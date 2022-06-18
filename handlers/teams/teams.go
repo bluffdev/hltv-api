@@ -52,6 +52,7 @@ func GetTeams(w http.ResponseWriter, r *http.Request) {
             nickname := s.Find("div.nick").Text()
             name, _ := s.Find("img.gtSmartphone-only.flag").Attr("title")
             flag, _ := s.Find("img.gtSmartphone-only.flag").Attr("src")
+            completeFlag := "https://www.hltv.org/" + flag
 
             Players = append(Players, Player{
                 fullname,
@@ -59,7 +60,7 @@ func GetTeams(w http.ResponseWriter, r *http.Request) {
                 nickname,
                 Country{
                     name,
-                    flag,
+                    completeFlag,
                 },
             })
         })
