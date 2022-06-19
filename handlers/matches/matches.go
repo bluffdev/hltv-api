@@ -55,18 +55,22 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
         eventName := h.ChildText("div.matchEventName.gtSmartphone-only")
         eventLogo := h.ChildAttr("img.matchEventLogo", "src")
 
-        if string(eventLogo[0]) == "/" {
-            eventLogo = "https://www.hltv.org/" + eventLogo
-        }
-
         var Teams []MatchTeam
 
         h.DOM.Find("div.matchTeams.text-ellipsis").Each(func(i int, s *goquery.Selection) {
             firstTeamName := s.Find("div.matchTeamName.text-ellipsis").Eq(0).Text()
             firstTeamLogo, _ := s.Find("img.matchTeamLogo").Eq(0).Attr("src")
+
+            if string(firstTeamLogo[0]) == "/" {
+                firstTeamLogo = "https://www.hltv.org" + firstTeamLogo
+            }
             
             secondTeamName := s.Find("div.matchTeamName.text-ellipsis").Eq(1).Text()
             secondTeamLogo, _ := s.Find("img.matchTeamLogo").Eq(1).Attr("src")
+
+            if (string(secondTeamLogo[0]) == "/") {
+                secondTeamLogo = "https://www.hltv.org" + secondTeamLogo
+            }
 
             Teams = append(Teams, MatchTeam{
                 firstTeamName,
