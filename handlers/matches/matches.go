@@ -54,6 +54,10 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
         maps := h.ChildText("div.matchMeta")
         eventName := h.ChildText("div.matchEventName.gtSmartphone-only")
         eventLogo := h.ChildAttr("img.matchEventLogo", "src")
+        
+        if eventLogo == "/" {
+            eventLogo = "https://www.hltv.org/" + eventLogo
+        }
 
         var Teams []MatchTeam
 
