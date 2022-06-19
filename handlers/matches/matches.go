@@ -115,6 +115,10 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
                 teamName, _ := s.Find("img.matchTeamLogo").Eq(0).Attr("title")
                 teamLogo, _ := s.Find("img.matchTeamLogo").Eq(0).Attr("src")
 
+                if string(teamLogo[0]) == "/" {
+                    teamLogo = "https://www.hltv.org" + teamLogo 
+                }
+
                 Teams = append(Teams, MatchTeam{
                     teamName,
                     teamLogo,
