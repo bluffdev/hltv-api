@@ -11,16 +11,21 @@ import (
 	"github.com/gocolly/colly"
 )
 
+type PlayersTeam struct {
+    Id   int    `json:"id"`
+    Name string `json:"name"`
+    Logo string `json:"logo"`
+}
+
 type PlayersStats struct {
-    Id         int    `json:"id"`
-    Nickname   string `json:"nickname"`
-    PlayerFlag string `json:"playerFlag"`
-    Team       string `json:"team"`
-    TeamLogo   string `json:"teamLogo"`
-    Slug       string `json:"slug"`
-    MapsPlayed string `json:"mapsPlayed"`
-    Kd         string `json:"kd"`
-    Rating     string `json:"rating"`
+    Id         int         `json:"id"`
+    Nickname   string      `json:"nickname"`
+    PlayerFlag string      `json:"playerFlag"`
+    Team       PlayersTeam `json:"team"`
+    Slug       string      `json:"slug"`
+    MapsPlayed string      `json:"mapsPlayed"`
+    Kd         string      `json:"kd"`
+    Rating     string      `json:"rating"`
 }
 
 func ExtractIdAndSlug(link string) (int, string) {
@@ -29,6 +34,12 @@ func ExtractIdAndSlug(link string) (int, string) {
     id, _ := strconv.Atoi(linkSlice[3])
     slug := linkSlice[4]
     return id, slug
+}
+
+func ExtractTeamId(link string) int {
+    stringId := strings.Split(link, "/")
+    id, _ := strconv.Atoi(stringId[3])
+    return id
 }
 
 func GetPlayers(w http.ResponseWriter, r *http.Request) {
@@ -50,15 +61,28 @@ func GetPlayers(w http.ResponseWriter, r *http.Request) {
             playerFlag = "https://www.hltv.org" + playerFlag
             team, _ := s.Find("td.teamCol").Find("a").Find("img").Attr("title")
             teamLogo, _ := s.Find("td.teamCol").Find("a").Find("img").Attr("src")
+            teamLink, _ := s.Find("td.teamCol").Find("a").Attr("href")
+            teamId := ExtractTeamId(teamLink)
+
+            if string(teamLogo[0]) == "/" {
+                teamLogo = "https://hltv.org" + teamLogo
+            }
+
             mapsPlayed := s.Find("td.statsDetail").First().Text()
             kd := s.Find("td.statsDetail").Eq(2).Text()
             rating := s.Find("td.ratingCol").Text()
+
+            Team := PlayersTeam{
+                teamId,
+                team,
+                teamLogo,
+            }
+
             Players = append(Players, PlayersStats{
                 id,
                 nickname,
                 playerFlag,
-                team,
-                teamLogo,
+                Team,
                 slug,
                 mapsPlayed,
                 kd,
