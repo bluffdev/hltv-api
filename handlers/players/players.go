@@ -14,7 +14,9 @@ import (
 type PlayersStats struct {
     Id         int    `json:"id"`
     Nickname   string `json:"nickname"`
+    PlayerFlag string `json:"playerFlag"`
     Team       string `json:"team"`
+    TeamLogo   string `json:"teamLogo"`
     Slug       string `json:"slug"`
     MapsPlayed string `json:"mapsPlayed"`
     Kd         string `json:"kd"`
@@ -44,14 +46,19 @@ func GetPlayers(w http.ResponseWriter, r *http.Request) {
             link, _ := s.Find("td.playerCol").Find("a").Attr("href")
             id, slug := ExtractIdAndSlug(link)
             nickname := s.Find("td.playerCol").Find("a").Text()
+            playerFlag, _ := s.Find("td.playerCol").Find("img").Attr("src")
+            playerFlag = "https://www.hltv.org" + playerFlag
             team, _ := s.Find("td.teamCol").Find("a").Find("img").Attr("title")
+            teamLogo, _ := s.Find("td.teamCol").Find("a").Find("img").Attr("src")
             mapsPlayed := s.Find("td.statsDetail").First().Text()
             kd := s.Find("td.statsDetail").Eq(2).Text()
             rating := s.Find("td.ratingCol").Text()
             Players = append(Players, PlayersStats{
                 id,
                 nickname,
+                playerFlag,
                 team,
+                teamLogo,
                 slug,
                 mapsPlayed,
                 kd,
